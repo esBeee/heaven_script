@@ -2,6 +2,13 @@
 # HEAVEN SCRIPT
 # Written in Ruby 2.2.2
 #
+# Preparation
+# ===========
+#
+# Install the colorize gem using
+#
+#   $ gem install colorize
+#
 #
 # Usage
 # =====
@@ -16,8 +23,7 @@
 require 'csv'
 require 'time'
 require 'date'
-
-require_relative './lib/colorize/lib/colorize'
+require 'colorize'
 
 require_relative './src/array'
 require_relative './src/number_formatter'
