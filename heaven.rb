@@ -82,21 +82,21 @@ CSV.foreach(path_to_csv, col_sep: ';', headers: :first_row) do |row|
   print '.'.cyan
 
    data_row = {
-    property_t: row['property_t'].to_sym,
-    street: row['street'],
-    zip_code: row['zip_code'],
-    city: row['city'],
-    latitude: row['latitude'].to_f,
-    longitude: row['longitude'].to_f,
-    living_spa: row['living_spa'].to_f,
-    sqm_price: row['sqm_price'].to_f,
-    created_at: Time.parse(row['created_at']),
-    down_at: Date.parse(row['down_at']),
-    name: row['name']
+    property_t: row['property_t'].force_encoding(::Encoding::UTF_8).to_sym,
+    street: row['street'].force_encoding(::Encoding::UTF_8),
+    zip_code: row['zip_code'].force_encoding(::Encoding::UTF_8),
+    city: row['city'].force_encoding(::Encoding::UTF_8),
+    latitude: row['latitude'].force_encoding(::Encoding::UTF_8).to_f,
+    longitude: row['longitude'].force_encoding(::Encoding::UTF_8).to_f,
+    living_spa: row['living_spa'].force_encoding(::Encoding::UTF_8).to_f,
+    sqm_price: row['sqm_price'].force_encoding(::Encoding::UTF_8).to_f,
+    created_at: Time.parse(row['created_at'].force_encoding(::Encoding::UTF_8)),
+    down_at: Date.parse(row['down_at'].force_encoding(::Encoding::UTF_8)),
+    name: row['name'].force_encoding(::Encoding::UTF_8)
   }
 
   if row.key?('price')
-    data_row[:price] = row['price'].to_i
+    data_row[:price] = row['price'].force_encoding(::Encoding::UTF_8).to_i
 
     if marketing_type.nil?
       marketing_type = :sell
@@ -104,7 +104,7 @@ CSV.foreach(path_to_csv, col_sep: ';', headers: :first_row) do |row|
       raise 'This script does not support input files with mixed marketing types'
     end
   elsif row.key?('base_rent')
-    data_row[:price] = row['base_rent'].to_f
+    data_row[:price] = row['base_rent'].force_encoding(::Encoding::UTF_8).to_f
 
     if marketing_type.nil?
       marketing_type = :rent
