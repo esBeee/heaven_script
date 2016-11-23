@@ -17,15 +17,15 @@ require 'csv'
 require 'time'
 require 'date'
 
-require_relative './lib/colorize/lib/colorize.rb'
+require_relative './lib/colorize/lib/colorize'
 
-require_relative './src/array.rb'
-require_relative './src/number_formatter.rb'
-require_relative './src/real_number_formatter.rb'
-require_relative './src/numerical_tuple.rb'
-require_relative './src/output_file.rb'
-require_relative './src/output_file/row.rb'
-require_relative './src/qgis_data_set.rb'
+require_relative './src/array'
+require_relative './src/number_formatter'
+require_relative './src/real_number_formatter'
+require_relative './src/numerical_tuple'
+require_relative './src/output_file'
+require_relative './src/output_file/row'
+require_relative './src/qgis_data_set'
 
 reference_time = Time.now
 reference_date = Date.today
