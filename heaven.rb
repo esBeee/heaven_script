@@ -78,7 +78,7 @@ puts 'Starting to imbibe CSV file at '.light_white + path_to_csv.light_cyan + '.
 # Prepare input data.
 in_data = []
 marketing_type = nil
-CSV.foreach(path_to_csv, col_sep: ',', headers: :first_row) do |row|
+CSV.foreach(path_to_csv, col_sep: ';', headers: :first_row) do |row|
   print '.'.cyan
 
    data_row = {
