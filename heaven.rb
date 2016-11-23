@@ -17,15 +17,15 @@ require 'csv'
 require 'time'
 require 'date'
 
-require './lib/colorize/lib/colorize.rb'
+require_relative './lib/colorize/lib/colorize.rb'
 
-require './src/array.rb'
-require './src/number_formatter.rb'
-require './src/real_number_formatter.rb'
-require './src/numerical_tuple.rb'
-require './src/output_file.rb'
-require './src/output_file/row.rb'
-require './src/qgis_data_set.rb'
+require_relative './src/array.rb'
+require_relative './src/number_formatter.rb'
+require_relative './src/real_number_formatter.rb'
+require_relative './src/numerical_tuple.rb'
+require_relative './src/output_file.rb'
+require_relative './src/output_file/row.rb'
+require_relative './src/qgis_data_set.rb'
 
 reference_time = Time.now
 reference_date = Date.today
@@ -171,9 +171,9 @@ qgis_data_set.distinct_names.each do |name|
     MedChange: NumericalTuple.new(qgis_data_set_for_last_last_12_months.sqm_prices_median, qgis_data_set_for_last_12_months.sqm_prices_median).change_rate
   }
 
-  if name == 'Altstadt-Nord'
-    puts qgis_data_set_for_20142.prices.inspect, qgis_data_set_for_20142.sqm_prices.inspect, qgis_data_set_for_20142.sqm_prices_mean
-  end
+  # if name == 'Altstadt-Nord'
+  #   puts qgis_data_set_for_20142.prices.inspect, qgis_data_set_for_20142.sqm_prices.inspect, qgis_data_set_for_20142.sqm_prices_mean
+  # end
 end
 
 puts ''
