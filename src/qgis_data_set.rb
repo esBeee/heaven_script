@@ -5,7 +5,7 @@ class QgisDataSet
   end
 
   def distinct_names
-    @set.map { |row| row[:name] }.uniq
+    map { |row| row.name }.uniq
   end
 
   def frequency
@@ -20,17 +20,29 @@ class QgisDataSet
     sqm_prices.median
   end
 
+  def dwell_time_mean
+    @dwell_time_mean ||= dwell_times.compact.mean
+  end
+
+  def dwell_time_median
+    @dwell_time_median ||= dwell_times.compact.median
+  end
+
+  def dwell_times
+    @dwell_times ||= map { |row| row.dwell_time }
+  end
+
   def prices
-    @prices ||= @set.map { |row| row[:price] }
+    @prices ||= map { |row| row.price }
   end
 
   def sqm_prices
-    @sqm_prices ||= @set.map { |row| row[:sqm_price] }
+    @sqm_prices ||= map { |row| row.sqm_price }
   end
 
   # Finders.
   def find_by_name name
-    data_with_name = @set.select { |row| row[:name] == name }
+    data_with_name = select { |row| row.name == name }
     self.class.new(data_with_name)
   end
 
@@ -45,12 +57,24 @@ class QgisDataSet
   end
 
   def find_younger_or_equal_than deadline
-    data_within = @set.select { |row| row[:down_at] >= deadline }
+    data_within = select { |row| row.down_at >= deadline }
     self.class.new(data_within)
   end
 
   def find_older_than deadline
-    data_within = @set.select { |row| row[:down_at] < deadline }
+    data_within = select { |row| row.down_at < deadline }
     self.class.new(data_within)
+  end
+
+  def map
+    @set.map do |row|
+      yield(QgisDataSetRow.new(row))
+    end
+  end
+
+  def select
+    @set.select do |row|
+      yield(QgisDataSetRow.new(row))
+    end
   end
 end

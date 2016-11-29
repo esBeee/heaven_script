@@ -32,6 +32,7 @@ require_relative './src/numerical_tuple'
 require_relative './src/output_file'
 require_relative './src/output_file/row'
 require_relative './src/qgis_data_set'
+require_relative './src/qgis_data_set_row'
 
 reference_time = Time.now
 reference_date = Date.today
@@ -174,7 +175,19 @@ qgis_data_set.distinct_names.each do |name|
     Med12lm: qgis_data_set_for_last_12_months.sqm_prices_median,
     Med12lmb: qgis_data_set_for_last_last_12_months.sqm_prices_median,
     AvgChange: NumericalTuple.new(qgis_data_set_for_last_last_12_months.sqm_prices_mean, qgis_data_set_for_last_12_months.sqm_prices_mean).change_rate,
-    MedChange: NumericalTuple.new(qgis_data_set_for_last_last_12_months.sqm_prices_median, qgis_data_set_for_last_12_months.sqm_prices_median).change_rate
+    MedChange: NumericalTuple.new(qgis_data_set_for_last_last_12_months.sqm_prices_median, qgis_data_set_for_last_12_months.sqm_prices_median).change_rate,
+    AvgToM20142: qgis_data_set_for_20142.dwell_time_mean,
+    AvgToM20151: qgis_data_set_for_20151.dwell_time_mean,
+    AvgToM20152: qgis_data_set_for_20152.dwell_time_mean,
+    AvgToM20161: qgis_data_set_for_20161.dwell_time_mean,
+    MedToM20142: qgis_data_set_for_20142.dwell_time_median,
+    MedToM20151: qgis_data_set_for_20151.dwell_time_median,
+    MedToM20152: qgis_data_set_for_20152.dwell_time_median,
+    MedToM20161: qgis_data_set_for_20161.dwell_time_median,
+    AvgToM12lm: qgis_data_set_for_last_12_months.dwell_time_mean,
+    AvgToM12lmb: qgis_data_set_for_last_last_12_months.dwell_time_mean,
+    MedToM12lm: qgis_data_set_for_last_12_months.dwell_time_median,
+    MedToM12lmb: qgis_data_set_for_last_last_12_months.dwell_time_median
   }
 
   # if name == 'Altstadt-Nord'
@@ -233,7 +246,19 @@ out_data_checker.map! do |out_data_checker_row|
     Med12lm: RealNumberFormatter.new(out_data_checker_row[:Med12lm]).decimal_number,
     Med12lmb: RealNumberFormatter.new(out_data_checker_row[:Med12lmb]).decimal_number,
     AvgChange: RealNumberFormatter.new(out_data_checker_row[:AvgChange]).decimal_number,
-    MedChange: RealNumberFormatter.new(out_data_checker_row[:MedChange]).decimal_number
+    MedChange: RealNumberFormatter.new(out_data_checker_row[:MedChange]).decimal_number,
+    AvgToM20142: RealNumberFormatter.new(out_data_checker_row[:AvgToM20142]).decimal_number,
+    AvgToM20151: RealNumberFormatter.new(out_data_checker_row[:AvgToM20151]).decimal_number,
+    AvgToM20152: RealNumberFormatter.new(out_data_checker_row[:AvgToM20152]).decimal_number,
+    AvgToM20161: RealNumberFormatter.new(out_data_checker_row[:AvgToM20161]).decimal_number,
+    MedToM20142: RealNumberFormatter.new(out_data_checker_row[:MedToM20142]).decimal_number,
+    MedToM20151: RealNumberFormatter.new(out_data_checker_row[:MedToM20151]).decimal_number,
+    MedToM20152: RealNumberFormatter.new(out_data_checker_row[:MedToM20152]).decimal_number,
+    MedToM20161: RealNumberFormatter.new(out_data_checker_row[:MedToM20161]).decimal_number,
+    AvgToM12lm: RealNumberFormatter.new(out_data_checker_row[:AvgToM12lm]).decimal_number,
+    AvgToM12lmb: RealNumberFormatter.new(out_data_checker_row[:AvgToM12lmb]).decimal_number,
+    MedToM12lm: RealNumberFormatter.new(out_data_checker_row[:MedToM12lm]).decimal_number,
+    MedToM12lmb: RealNumberFormatter.new(out_data_checker_row[:MedToM12lmb]).decimal_number
   )
 end
 
@@ -247,13 +272,13 @@ puts ''
 puts ''
 puts ''
 
-input_file_name = path_to_csv.split('/').last
+input_file_name = path_to_csv.split('/').last.gsub('.csv', '').gsub('.CSV', '')
 #
 # 3.
 #
 # Create CHECKER file.
 output_path = "./CHECKER_#{input_file_name}.csv"
-headers = %i(name Anz20142 Anz20151 Anz20152 Anz20161 Avg20142 Avg20151 Avg20152 Avg20161 Med20142 Med20151 Med20152 Med20161 Anz12lm Anz12lmb Avg12lm Avg12lmb Med12lm Med12lmb AvgChange MedChange)
+headers = %i(name Anz20142 Anz20151 Anz20152 Anz20161 Avg20142 Avg20151 Avg20152 Avg20161 Med20142 Med20151 Med20152 Med20161 Anz12lm Anz12lmb Avg12lm Avg12lmb Med12lm Med12lmb AvgChange MedChange AvgToM20142 AvgToM20151 AvgToM20152 AvgToM20161 MedToM20142 MedToM20151 MedToM20152 MedToM20161 AvgToM12lm AvgToM12lmb MedToM12lm MedToM12lmb)
 output_file = OutputFile.new(output_path, headers)
 puts ' 3 '.light_cyan.swap
 puts ''
