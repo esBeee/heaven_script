@@ -79,7 +79,7 @@ puts 'Starting to imbibe CSV file at '.light_white + path_to_csv.light_cyan + '.
 # Prepare input data.
 in_data = []
 marketing_type = nil
-CSV.foreach(path_to_csv, col_sep: ';', headers: :first_row) do |row|
+CSV.foreach(path_to_csv, col_sep: ',', headers: :first_row) do |row|
   print '.'.cyan
 
    data_row = {
@@ -164,10 +164,12 @@ qgis_data_set.distinct_names.each do |name|
     Avg20151: qgis_data_set_for_20151.sqm_prices_mean,
     Avg20152: qgis_data_set_for_20152.sqm_prices_mean,
     Avg20161: qgis_data_set_for_20161.sqm_prices_mean,
+    AvgLhYChange: NumericalTuple.new(qgis_data_set_for_20151.sqm_prices_mean, qgis_data_set_for_20161.sqm_prices_mean).change_rate,
     Med20142: qgis_data_set_for_20142.sqm_prices_median,
     Med20151: qgis_data_set_for_20151.sqm_prices_median,
     Med20152: qgis_data_set_for_20152.sqm_prices_median,
     Med20161: qgis_data_set_for_20161.sqm_prices_median,
+    MedLhYChange: NumericalTuple.new(qgis_data_set_for_20151.sqm_prices_median, qgis_data_set_for_20161.sqm_prices_median).change_rate,
     Anz12lm: qgis_data_set_for_last_12_months.frequency,
     Anz12lmb: qgis_data_set_for_last_last_12_months.frequency,
     Avg12lm: qgis_data_set_for_last_12_months.sqm_prices_mean,
@@ -180,14 +182,18 @@ qgis_data_set.distinct_names.each do |name|
     AvgToM20151: qgis_data_set_for_20151.dwell_time_mean,
     AvgToM20152: qgis_data_set_for_20152.dwell_time_mean,
     AvgToM20161: qgis_data_set_for_20161.dwell_time_mean,
+    AvgToMLhYChange: NumericalTuple.new(qgis_data_set_for_20151.dwell_time_mean, qgis_data_set_for_20161.dwell_time_mean).change_rate,
     MedToM20142: qgis_data_set_for_20142.dwell_time_median,
     MedToM20151: qgis_data_set_for_20151.dwell_time_median,
     MedToM20152: qgis_data_set_for_20152.dwell_time_median,
     MedToM20161: qgis_data_set_for_20161.dwell_time_median,
+    MedToMLhYChange: NumericalTuple.new(qgis_data_set_for_20151.dwell_time_mean, qgis_data_set_for_20161.dwell_time_mean).change_rate,
     AvgToM12lm: qgis_data_set_for_last_12_months.dwell_time_mean,
     AvgToM12lmb: qgis_data_set_for_last_last_12_months.dwell_time_mean,
+    AvgToMChange: NumericalTuple.new(qgis_data_set_for_last_last_12_months.dwell_time_mean, qgis_data_set_for_last_12_months.dwell_time_mean).change_rate,
     MedToM12lm: qgis_data_set_for_last_12_months.dwell_time_median,
-    MedToM12lmb: qgis_data_set_for_last_last_12_months.dwell_time_median
+    MedToM12lmb: qgis_data_set_for_last_last_12_months.dwell_time_median,
+    MedToMChange: NumericalTuple.new(qgis_data_set_for_last_last_12_months.dwell_time_median, qgis_data_set_for_last_12_months.dwell_time_median).change_rate
   }
 
   # if name == 'Altstadt-Nord'
@@ -258,7 +264,13 @@ out_data_checker.map! do |out_data_checker_row|
     AvgToM12lm: RealNumberFormatter.new(out_data_checker_row[:AvgToM12lm]).decimal_number,
     AvgToM12lmb: RealNumberFormatter.new(out_data_checker_row[:AvgToM12lmb]).decimal_number,
     MedToM12lm: RealNumberFormatter.new(out_data_checker_row[:MedToM12lm]).decimal_number,
-    MedToM12lmb: RealNumberFormatter.new(out_data_checker_row[:MedToM12lmb]).decimal_number
+    MedToM12lmb: RealNumberFormatter.new(out_data_checker_row[:MedToM12lmb]).decimal_number,
+    AvgLhYChange: RealNumberFormatter.new(out_data_checker_row[:AvgLhYChange]).decimal_number,
+    MedLhYChange: RealNumberFormatter.new(out_data_checker_row[:MedLhYChange]).decimal_number,
+    AvgToMLhYChange: RealNumberFormatter.new(out_data_checker_row[:AvgToMLhYChange]).decimal_number,
+    MedToMLhYChange: RealNumberFormatter.new(out_data_checker_row[:MedToMLhYChange]).decimal_number,
+    AvgToMChange: RealNumberFormatter.new(out_data_checker_row[:AvgToMChange]).decimal_number,
+    MedToMChange: RealNumberFormatter.new(out_data_checker_row[:MedToMChange]).decimal_number
   )
 end
 
@@ -278,7 +290,7 @@ input_file_name = path_to_csv.split('/').last.gsub('.csv', '').gsub('.CSV', '')
 #
 # Create CHECKER file.
 output_path = "./CHECKER_#{input_file_name}.csv"
-headers = %i(name Anz20142 Anz20151 Anz20152 Anz20161 Avg20142 Avg20151 Avg20152 Avg20161 Med20142 Med20151 Med20152 Med20161 Anz12lm Anz12lmb Avg12lm Avg12lmb Med12lm Med12lmb AvgChange MedChange AvgToM20142 AvgToM20151 AvgToM20152 AvgToM20161 MedToM20142 MedToM20151 MedToM20152 MedToM20161 AvgToM12lm AvgToM12lmb MedToM12lm MedToM12lmb)
+headers = %i(name Anz20142 Anz20151 Anz20152 Anz20161 Avg20142 Avg20151 Avg20152 Avg20161 Med20142 Med20151 Med20152 Med20161 Anz12lm Anz12lmb Avg12lm Avg12lmb Med12lm Med12lmb AvgChange MedChange AvgToM20142 AvgToM20151 AvgToM20152 AvgToM20161 MedToM20142 MedToM20151 MedToM20152 MedToM20161 AvgToM12lm AvgToM12lmb MedToM12lm MedToM12lmb AvgLhYChange MedLhYChange AvgToMLhYChange MedToMLhYChange AvgToMChange MedToMChange)
 output_file = OutputFile.new(output_path, headers)
 puts ' 3 '.light_cyan.swap
 puts ''

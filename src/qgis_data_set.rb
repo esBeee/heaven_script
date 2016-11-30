@@ -21,11 +21,11 @@ class QgisDataSet
   end
 
   def dwell_time_mean
-    @dwell_time_mean ||= dwell_times.compact.mean
+    @dwell_time_mean ||= dwell_times.compact.select { |dwell_time| dwell_time >= 21 && dwell_time <= 100 }.mean
   end
 
   def dwell_time_median
-    @dwell_time_median ||= dwell_times.compact.median
+    @dwell_time_median ||= dwell_times.compact.select { |dwell_time| dwell_time >= 21 && dwell_time <= 100 }.median
   end
 
   def dwell_times
